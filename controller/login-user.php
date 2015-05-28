@@ -1,11 +1,8 @@
-  <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.css">
+                <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.css">
         <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
         <link type="text/css" rel="stylesheet" href="css/custom-style.css">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        
-        <body class="img-responsive" background="http://www.919marketing.com/wp-content/uploads/2011/11/HiRes.jpg">       
+
+        <body>       
             <div class="container">    
                 <div class="row"> 
                     <div class="col-xs-3">
@@ -24,7 +21,7 @@
                         </nav>
                     </div>    
                     <div class="col-xs-3">  
-                        <nav align="center" >
+                        <nav align="center">
                             <a class="list-group-item" href="post.php">POST</a> 
                         </nav>
                     </div>
@@ -32,14 +29,26 @@
             </div>
         </body>
 
-<?php
-    require_once(__DIR__ . "/controller/login-verify.php");
-    require_once(__DIR__ . "/view/header.php");
-    if(authenticateUser()) {
-        require_once(__DIR__ . "/view/navigation.php");
-    }
-    require_once(__DIR__ . "/controller/create-db.php");
-    require_once(__DIR__ . "/view/footer.php");
-    require_once(__DIR__ . "/controller/read-posts.php");
-?>
 
+<?php
+    require_once(__DIR__ . "/../model/config.php");
+
+    $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING);
+
+    $query = $_SESSION["connection"]->query("SELECT salt, password FROM users WHERE username = '$username' ");
+
+    if ($query->num_rows == 1) {
+        $row = $query->fetch_array();
+
+        if ($row["password"] === crypt($password, $row["salt"])) {
+            $_SESSION["authenticated"] = true;
+            echo "<p>Login Successful!</p>";
+        }  
+        else {
+            echo "<p>Invalid username and password</p>";
+        }
+    }   
+    else {
+        echo "<p>Invalid username and password</p>";
+    }
