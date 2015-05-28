@@ -1,0 +1,26 @@
+
+div{
+    background: transparent;
+    border-style: double;
+    border-width: 3px;
+    border-color: white;
+    padding: 20px;
+}
+
+.container{
+    border-color: black;                           
+}
+
+.row{
+    border-color: black;
+}    
+
+.list-group-item{
+    border: 0;
+    margin-top:5px;
+    margin-bottom: 5px;
+    background-color: transparent;
+}
+.body{
+    background-image: url("http://www.919marketing.com/wp-content/uploads/2011/11/HiRes.jpg");
+}
